@@ -8,16 +8,15 @@ Do not use file input and output
 Please be very careful.
 */
 
-import java.math.BigInteger;
 import java.util.Scanner;
-import java.util.HashMap;
+
 /*
    As the name of the class should be Solution , using Solution.java as the filename is recommended.
    In any case, you can execute your program by running 'java Solution' command.
  */
-class Test {
-    static int Answer;
-    static HashMap<Integer,Integer> memo;
+class MTGame {
+    static String Answer;
+
     public static void main(String args[]) throws Exception	{
 		/*
 		   The method below means that the program will read from input.txt, instead of standard(keyboard) input.
@@ -32,50 +31,58 @@ class Test {
 		 */
         Scanner sc = new Scanner(System.in);
         //Scanner sc = new Scanner(new FileInputStream("input.txt"));
-        memo = new HashMap<>();
+
         int T = sc.nextInt();
         for(int test_case = 0; test_case < T; test_case++) {
 
-            Answer = 0;
+            // Answer = 0;
             /////////////////////////////////////////////////////////////////////////////////////////////
 			/*
 			   Implement your algorithm here.
 			   The answer to the case will be stored in variable Answer.
 			 */
             /////////////////////////////////////////////////////////////////////////////////////////////
+            int nA = sc.nextInt();
+            int nB = sc.nextInt();
+            int total = nA + nB;
 
-            int K = sc.nextInt();
+            Answer ="";
+            int nC = sc.nextInt();
 
-            BigInteger max = new BigInteger("1");
-            BigInteger binary = new BigInteger("2");
-            for(int i=0;i<K;i++)
+            for(int i=0;i<nC;i++)
             {
-                max = max.multiply(binary);
-            }
-            int i=1;
+                int deathNum  = sc.nextInt();
+                int K = sc.nextInt();
 
-            while(true)
-            {
-                if(functions(i)==K)
-                    break;
-                i++;
+                int tmp = deathNum - K -1;
+
+                int deathCount = tmp/K;
+                System.out.println("tmp k" +tmp+" " +K);
+                if(tmp%K !=0)
+                {
+                    deathCount++;
+                }
+                System.out.println(deathCount);
+                deathCount =deathCount%total;
+                if(nA - deathCount >= 1)
+                {
+                    // a에 있는 누군가 승리로 가는 숫자를 부름.
+
+                    // 9이면 5
+                    // 10 이면 6
+                    System.out.println(deathCount + " " + nA);
+                    Answer+="a";
+
+                }else
+                {
+                    System.out.println(deathCount + " " + nB);
+                    Answer+="b";
+                }
+
             }
             // Print the answer to standard output(screen).
             System.out.println("Case #"+(test_case+1));
-            System.out.println(i + " " + max.toString());
+            System.out.println(Answer);
         }
-    }
-    public static int functions(int N)
-    {
-        int count =0;
-        while(N !=1)
-        {
-            if(N%2 == 0)
-                N=N/2;
-            else
-                N=3*N+1;
-            count++;
-        }
-        return count;
     }
 }

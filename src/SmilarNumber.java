@@ -8,16 +8,17 @@ Do not use file input and output
 Please be very careful.
 */
 
-import java.math.BigInteger;
+import javafx.util.Pair;
+
 import java.util.Scanner;
-import java.util.HashMap;
+
 /*
    As the name of the class should be Solution , using Solution.java as the filename is recommended.
    In any case, you can execute your program by running 'java Solution' command.
  */
-class Test {
+class SimilarNumber {
     static int Answer;
-    static HashMap<Integer,Integer> memo;
+
     public static void main(String args[]) throws Exception	{
 		/*
 		   The method below means that the program will read from input.txt, instead of standard(keyboard) input.
@@ -32,50 +33,80 @@ class Test {
 		 */
         Scanner sc = new Scanner(System.in);
         //Scanner sc = new Scanner(new FileInputStream("input.txt"));
-        memo = new HashMap<>();
+
         int T = sc.nextInt();
         for(int test_case = 0; test_case < T; test_case++) {
 
-            Answer = 0;
+            // Answer = 0;
             /////////////////////////////////////////////////////////////////////////////////////////////
 			/*
 			   Implement your algorithm here.
 			   The answer to the case will be stored in variable Answer.
 			 */
             /////////////////////////////////////////////////////////////////////////////////////////////
+            int N = sc.nextInt();
 
-            int K = sc.nextInt();
-
-            BigInteger max = new BigInteger("1");
-            BigInteger binary = new BigInteger("2");
-            for(int i=0;i<K;i++)
+            int min = Integer.MAX_VALUE;
+            for(int i=N-1;i>=1;i--)
             {
-                max = max.multiply(binary);
+                if(isSNum(N,i)) {
+                    min = i;
+                    i=i/2;
+                    i++;
+                    //break;
+                }
             }
-            int i=1;
-
-            while(true)
-            {
-                if(functions(i)==K)
-                    break;
-                i++;
-            }
+            Answer = min;
             // Print the answer to standard output(screen).
             System.out.println("Case #"+(test_case+1));
-            System.out.println(i + " " + max.toString());
+            System.out.println(Answer);
         }
     }
-    public static int functions(int N)
+    public static boolean isSNum(int num , int N)
     {
-        int count =0;
-        while(N !=1)
+        int tmp = 0;
+        int start = num%N;
+        num = num/N;
+        while(num!=0)
         {
-            if(N%2 == 0)
-                N=N/2;
-            else
-                N=3*N+1;
-            count++;
+            tmp = (num%N);
+            if (tmp!=start)
+                return false;
+            num = num/N;
         }
-        return count;
+        return true;
+    }
+    public static boolean isSimilarNum(String nums)
+    {
+        if(nums.contains(","))
+        {
+            nums=nums.trim();
+            String sub[] = nums.split(",");
+
+            int start = Integer.parseInt(sub[0]);
+
+            //System.out.println(start);
+            for(int i=1;i<sub.length;i++)
+            {
+                int tmp = Integer.parseInt(sub[i]);
+                if(tmp!=start)
+                {
+                    // System.out.println(start + " / " +tmp);
+                    return false;
+                }
+            }
+
+            return true;
+        }else
+        {
+            int start = Integer.parseInt(nums.charAt(0)+"");
+            for(int i=1;i<nums.length();i++)
+            {
+                int tmp = Integer.parseInt(nums.charAt(i)+"");
+                if(tmp!=start)
+                    return false;
+            }
+            return true;
+        }
     }
 }
