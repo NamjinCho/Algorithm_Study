@@ -20,6 +20,7 @@ class GoodNumber {
     static int Answer;
     static int [] arr;
     static boolean maps[];
+    static int N;
     public static void main(String args[]) throws Exception	{
 		/*
 		   The method below means that the program will read from input.txt, instead of standard(keyboard) input.
@@ -34,7 +35,7 @@ class GoodNumber {
 		 */
         Scanner sc = new Scanner(System.in);
         //Scanner sc = new Scanner(new FileInputStream("input.txt"));
-        maps = new boolean[200002];
+        //maps = new boolean[];
         int T = sc.nextInt();
         for(int test_case = 0; test_case < T; test_case++) {
 
@@ -46,13 +47,16 @@ class GoodNumber {
 			 */
             /////////////////////////////////////////////////////////////////////////////////////////////
 
-            int N = sc.nextInt();
+            N = sc.nextInt();
             arr=new int[N];
+            int Max = -1;
             for(int i=0;i<N;i++)
             {
                 arr[i]=sc.nextInt();
+                Max = Math.max(arr[i],Max);
             }
             Answer=0;
+            maps=new boolean[Max+1];
             for(int i=1;i<N;i++)
             {
                 if(maps[arr[i]]) {
@@ -62,6 +66,7 @@ class GoodNumber {
                 if(algorithm(0,0,0,i))
                 {
                     Answer++;
+                    maps[i] = true;
                 }
             }
             // Print the answer to standard output(screen).
@@ -80,10 +85,8 @@ class GoodNumber {
             if (arr[target]==sum)
                  return true;
             else {
-
-                if(sum <= 100000);
-                    maps[sum] = true;
-
+                if(sum<=N)
+                maps[sum] = true;
                 return false;
             }
         }else
