@@ -11,16 +11,16 @@ public class Fire {
     static char board[][];
     static int dir[][] = {{-1,0},{0,-1},{1,0},{0,1}};
     static int cost[][];
-    static boolean visit[][];
-    static boolean hvisit[][];
     static int ans = Integer.MAX_VALUE;
     static class Pair{
         int row;
         int col;
-        Pair(int r,int c)
+        boolean isFire;
+        Pair(int r,int c,boolean f)
         {
             row = r;
             col = c;
+            isFire = f;
         }
     }
 
@@ -38,9 +38,8 @@ public class Fire {
             int row = 0;
             int col = 0;
             Queue<Pair> fq = new LinkedList<>();
-            visit=new boolean[N][M];
-            hvisit = new boolean[N][M];
             ans=Integer.MAX_VALUE;
+            Pair h  = new Pair(-1,-1,false);
             for(int r=0;r<N;r++)
             {
                 line = sc.nextLine();
@@ -49,30 +48,36 @@ public class Fire {
                     board[r][c]=line.charAt(c);
                     if(board[r][c]=='*')
                     {
-                        Pair f = new Pair(r,c);
+                        Pair f = new Pair(r,c,true);
                         fq.offer(f);
-                        visit[r][c] = true;
                     }else if(board[r][c]=='@')
                     {
                         row = r;
                         col = c;
+                        h=new Pair(r,c,false);
                     }
                 }
             }
-            bfs(fq);
-            hvisit[row][col]=true;
-            dfs(row,col,1);
-            if(ans==Integer.MAX_VALUE)
-                System.out.println("IMPASSIBLE");
+            if(h.row == -1 && h.col==-1)
+            {
+                System.out.println("IMPOSSIBLE");
+                return;
+            }
+
+            fq.offer(h);
+            ans = bfs(fq);
+            if(row == 0 || row == N-1 || col==0 || col==M-1)
+                System.out.println("1");
+            else if(ans==-1)
+                System.out.println("IMPOSSIBLE");
             else
-                System.out.println(ans);
+                System.out.println(ans+1);
         }
     }
-    public static void bfs(Queue<Pair> q)
+    public static int bfs(Queue<Pair> q)
     {
 
         cost = new int[N][M];
-        //visit = new boolean[N][M];
 
         while(!q.isEmpty())
         {
@@ -81,40 +86,32 @@ public class Fire {
             {
                 int nr = f.row+dir[i][0];
                 int nc = f.col+dir[i][1];
-                if(nr>=0 && nr <N && nc >=0 && nc<M)
-                {
-                    if(!visit[nr][nc]&&board[nr][nc]!='#' )
-                    {
-                        cost[nr][nc] = cost[f.row][f.col]+1;
-                        visit[f.row][f.col] = true;
-                        Pair p = new Pair(nr,nc);
-                        q.offer(p);
+                 if(nr>=0 && nr < N &&nc>=0 && nc<M) {
+
+                    if (f.isFire) {
+                        if(board[nr][nc]=='#' || board[nr][nc]=='*')
+                            continue;
+                        Pair np = new Pair(nr,nc,true);
+                        q.offer(np);
+                        board[nr][nc]='*';
+                    } else {
+                        if(board[nr][nc]=='@' || board[nr][nc]=='#' || board[nr][nc]=='*') {
+                            continue;
+                        }
+                        else {
+                            Pair np = new Pair(nr, nc, false);
+                            q.offer(np);
+                            cost[nr][nc] = cost[f.row][f.col] + 1;
+                            board[nr][nc]='@';
+                            if (nr == 0 || nr == N - 1 || nc == 0 || nc == M - 1) {
+                                return cost[nr][nc];
+                            }
+                        }
                     }
                 }
+
             }
         }
-    }
-    public static void dfs(int row,int col, int count)
-    {
-        if(row==0 || col == 0 || row==N-1 || col==M-1) {
-            ans = Math.min(ans,count);
-            return;
-        }
-        for(int i=0;i<4;i++)
-        {
-            int nr = row+dir[i][0];
-            int nc= col+dir[i][1];
-            if(nr>=0 && nr <N && nc >=0 && nc<M)
-            {
-                if(!hvisit[nr][nc] && board[nr][nc]=='.')
-                {
-                    if(cost[nr][nc]!=0 && cost[nr][nc]<=count)
-                        continue;
-                    hvisit[nr][nc] = true;
-                    dfs(nr,nc,count+1);
-                    hvisit[nr][nc] = false;
-                }
-            }
-        }
+        return -1;
     }
 }

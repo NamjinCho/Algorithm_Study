@@ -10,6 +10,7 @@ Please be very careful.
 
 import java.lang.reflect.Array;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.HashMap;
@@ -32,7 +33,11 @@ class Test {
 		/*
 		   Make new scanner from standard input System.in, and read data.
 		 */
-
+        ArrayList<Integer> list = new ArrayList();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.remove(list.size()-1);
         Scanner sc = new Scanner(System.in);
         //Scanner sc = new Scanner(new FileInputStream("input.txt"));
         memo = new HashMap<>();
