@@ -1,17 +1,13 @@
-import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Scanner;
 
-/**
- * Created by NamjinCho on 2017-07-28.
- */
 public class Hacking {
 
     public static int N;
     public static int[][]adj;
     public static boolean visit[];
     public static int count[];
+    public static boolean v2[];
     static PriorityQueue<Point> pq;
     static class Point implements Comparable<Point>{
 
@@ -25,9 +21,9 @@ public class Hacking {
         @Override
         public int compareTo(Point o) {
 
-                if (this.count > o.count)
-                    return 1;
-                else return 1;
+            if (this.count > o.count)
+                return 1;
+            else return 1;
         }
     }
     public static void main(String [] args)
@@ -36,7 +32,9 @@ public class Hacking {
         N = sc.nextInt();
         adj = new int[N+1][N+1];
         int M = sc.nextInt();
+        visit = new boolean[N+1];
         count=new int[N+1];
+        pq = new PriorityQueue<>();
         for(int i=0;i<M;i++)
         {
             int a=sc.nextInt();
@@ -46,37 +44,43 @@ public class Hacking {
         int max = -1;
         for(int i=1;i<=N;i++)
         {
-                count[i] =bfs(i);
-                max=Math.max(count[i],max);
+            if(!visit[i])
+            {
+                visit[i]=true;
+                v2= new boolean[N+1];
+                max=Math.max(dfs(i),max);
+            }
         }
         for(int i=1;i<=N;i++)
         {
             if(count[i]==max)
                 System.out.print(i+ " ");
         }
-    }
-    public static int bfs(int b)
-    {
-        Queue<Integer> q = new LinkedList<>();
-        q.offer(b);
-        visit = new boolean[N+1];
-        visit[b] = true;
-        int result = 0;
 
-        while(!q.isEmpty())
+        System.out.println();
+
+    }
+    public static int dfs(int b)
+    {
+        int total = 0 ;
+        v2[b]=true;
+        for(int i=1;i<=N;i++)
         {
-            int s = q.poll();
-            for(int i=1;i<N+1;i++)
+            if(!visit[i] && adj[b][i]==1)
             {
-                if(adj[s][i]==1 && !visit[i])
-                {
-                    result++;
-                    q.offer(i);
-                    visit[i]=true;
+                visit[i]=true;
+                total+=dfs(i);
+                total++;
+            }
+            else if(adj[b][i]==1)
+            {
+                if(!v2[i]){
+                    total+=count[i]+1;
+                    v2[i]=true;
                 }
             }
         }
-        return result;
+        count[b]=total;
+        return total;
     }
-
 }
