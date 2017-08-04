@@ -22,8 +22,8 @@ public class DSLR {
     }
     public static String bfs(int og, int dst)
     {
-        boolean visit[]=new boolean[20001];
-        String [] cmd = new String [20001];
+        boolean visit[]=new boolean[10001];
+        String [] cmd = new String [10001];
         Queue<Integer> q = new LinkedList<>();
         q.offer(og);
         visit[og]=true;
@@ -45,6 +45,8 @@ public class DSLR {
                 {
                     t='D';
                     tmp = (s*2) %10000;
+
+
                 }else if(i==1)
                 {
 
@@ -55,28 +57,14 @@ public class DSLR {
                     t='S';
                 }else if(i==2)
                 {
-                    String s2 = s+"";
-                    if(s2.length()<4)
-                    {
-                        int k = 4-s2.length();
-                        for(int j=0;j<k;j++)
-                            s2="0"+s2;
 
-                    }
-                    String s3 = s2.substring(1,4)+s2.substring(0,1);
-                    tmp = Integer.parseInt(s3);
+                    int first = s / 1000;
+                    int last = s % 1000;
+                    tmp = (last)*10 + first;
                     t='L';
                 }else{
-                    String s2 = s+"";
-                    if(s2.length()<4)
-                    {
-                        int k = 4-s2.length();
-                        for(int j=0;j<k;j++)
-                            s2="0"+s2;
-
-                    }
-                    String s3 = s2.substring(3,4)+s2.substring(0,3);
-                    tmp = Integer.parseInt(s3);
+                    int last = s%10;
+                    tmp =  s/10 + last*1000;
                     t='R';
                 }
 
