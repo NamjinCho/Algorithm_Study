@@ -6,6 +6,19 @@ import java.util.Scanner;
  * Created by NamjinCho on 2017-08-14.
  */
 public class Monkey {
+    static class Ele{
+        int row;
+        int col;
+        int cost;
+        int jump;
+        Ele(int r, int c, int co,int j)
+        {
+            row =r;
+            col = c;
+            cost = co;
+            jump = j;
+        }
+    }
     static int K;
     static int R, C;
     static int[][] map;
@@ -27,39 +40,51 @@ public class Monkey {
             }
         }
 
-        dfs(0, 0, 0, 0);
-        if (ans == Integer.MAX_VALUE) {
-            System.out.println(-1);
-        } else {
-            System.out.println(ans);
-        }
+        ans = bfs();
+        System.out.println(ans);
     }
 
+    public static int bfs()
+    {
+        boolean visit[][][] = new boolean[K+1][R][C];
+        Queue<Ele> q = new LinkedList<>();
+        q.offer(new Ele(0,0,0,0));
+        visit[0][0][0] = true;
+        while(!q.isEmpty())
+        {
+            Ele e = q.poll();
 
-    public static void dfs(int row, int col, int k, int count) {
-        if (row == R - 1 && col == C - 1) {
-            ans = Math.min(count, ans);
-        }
-        for (int i = 0; i < 12; i++) {
-            int nr = row + dir[i][0];
-            int nc = col + dir[i][1];
+            for(int i=0;i<12;i++)
+            {
+                int nr = e.row+dir[i][0];
+                int nc = e.col + dir[i][1];
 
-            if (nr >= 0 && nr < R && nc >= 0 && nc < C && map[nr][nc] == 0) {
-                if (!visit[nr][nc]) {
-                    if (i < 4) {
-                        visit[nr][nc] = true;
-                        dfs(nr, nc, k, count + 1);
-                        visit[nr][nc] = false;
-                    } else {
-                        if (k < K) {
-                            visit[nr][nc] = true;
-                            dfs(nr, nc, k+1, count + 1);
-                            visit[nr][nc] = false;
+                if(i>=4 && e.jump >=K)
+                    continue;
+
+                if(nr>=0 && nr < R && nc >=0 && nc<C)
+                {
+                    if(nr==R-1 && nc==C-1)
+                    {
+                        return e.cost+1;
+                    }
+                    if(map[nr][nc]==0) {
+                        if (i < 4) {
+                            if (!visit[e.jump][nr][nc]) {
+                                visit[e.jump][nr][nc] = true;
+                                q.offer(new Ele(nr, nc, e.cost + 1, e.jump));
+                            }
+                        } else {
+                            if (!visit[e.jump + 1][nr][nc]) {
+                                visit[e.jump + 1][nr][nc] = true;
+                                q.offer(new Ele(nr, nc, e.cost + 1, e.jump + 1));
+                            }
                         }
                     }
                 }
             }
         }
-
+        return -1;
     }
+
 }

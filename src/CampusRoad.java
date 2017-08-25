@@ -143,6 +143,7 @@ class CampusRoad {
                 if (check[node.index] == false && node.dist != Integer.MAX_VALUE && node.dist < min) {
                     minIndex = node.index;
                     min = node.dist;
+                    break;
                 }
             }
             //System.out.print(minIndex+" " );
