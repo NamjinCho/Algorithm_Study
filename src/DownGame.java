@@ -22,6 +22,7 @@ public class DownGame {
             }
 
         }
+
         for (int i = 1; i < N; i++) {
             for (int j = 0; j < 3; j++) {
                 int max = 0;
@@ -38,6 +39,7 @@ public class DownGame {
                 arr[i][j][2] = arr[i][j][0] + min;
             }
         }
+
         int min = arr[N-1][0][2];
         int max = arr[N-1][0][1];
         for(int i=0;i<3;i++)

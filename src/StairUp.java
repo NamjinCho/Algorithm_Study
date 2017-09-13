@@ -24,56 +24,29 @@ public class StairUp {
         {
             dp[i] = sc.nextInt();
         }
-        ans = 0;
-        bfs();
-        System.out.println(ans);
-    }
-    public static void bfs()
-    {
-        Queue<Integer> q = new LinkedList<>();
-        Queue<Integer> iq = new LinkedList<>();
-        Queue<Integer> tq = new LinkedList<>();
-        int [][]count= new int[N][3];
-        q.offer(0);
-        tq.offer(dp[0]);
-        iq.offer(2);
-        while (!q.isEmpty())
-        {
-            int total = tq.poll();
-            int inc = iq.poll();
-            int idx = q.poll();
-            if(idx==N-1)
-            {
-                ans = Math.max(ans,total);
-                continue;
-            }
-            if(inc==1)
-            {
-                int nidx = idx+2;
-                if(nidx < N)
-                {
-                    if(count[nidx][inc] ==0 || count[nidx][inc] < total + dp[nidx] ) {
-                        tq.offer(total + dp[nidx]);
-                        count[nidx][inc] = total + dp[nidx];
-                        q.offer(nidx);
-                        iq.offer(2);
-
-                    }
-                }
-            }else
-            {
-                for(int i=1;i<=2;i++)
-                {
-                    int nidx = idx+i;
-                    if(nidx < N && (count[nidx][i] ==0 || count[nidx][i] < total + dp[nidx]) ) {
-                        tq.offer(total + dp[nidx]);
-                        count[nidx][i] = total + dp[nidx];
-                        q.offer(nidx);
-                        iq.offer(i);
-                    }
-                }
-            }
-
+        int dp2 [][] = new int[N][2];
+        boolean con [] = new boolean[N];
+        dp2[0][0] = dp[0];
+        if(N>=2) {
+            dp2[1][0] = dp[0] + dp[1];
+            dp2[1][1] = dp[1];
+            con[1] = true;
         }
+        for(int i=2;i<N;i++)
+        {
+            if(con[i-1] == false)
+            {
+                int tmp = Math.max(dp2[i-1][0],dp2[i-1][1]);
+                dp2[i][0] = tmp+dp[i];
+                dp2[i][1] = Math.max(dp2[i-2][0],dp2[i-2][1]) + dp[i];
+                con[i] = (dp2[i][0] > dp2[i][1]);
+            }else{
+                dp2[i][0] = dp2[i-1][1]+dp[i];
+                dp2[i][1] = Math.max(dp2[i-2][0],dp2[i-2][1])+dp[i];
+                con[i] = (dp2[i][0] > dp2[i][1]);
+            }
+        }
+        ans = Math.max(dp2[N-1][0],dp2[N-1][1]);
+        System.out.println(ans);
     }
 }
