@@ -18,6 +18,10 @@ public class JumpJump {
         arr[1][1] = 0;
         for(int i=1;i<N;i++)
         {
+
+            if(arr[i][1]==Integer.MAX_VALUE)
+                continue;
+
             for(int j=1;j<=arr[i][0];j++)
             {
                 if(j+i>N)

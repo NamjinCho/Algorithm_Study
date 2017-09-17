@@ -14,39 +14,34 @@ public class Jump {
         Scanner sc = new Scanner(System.in);
         N = sc.nextInt();
         map = new int[N][N];
+        long ans[][] = new long[N][N];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 map[i][j] = sc.nextInt();
             }
         }
-        long r = bfs();
-        System.out.println(r);
-    }
-    public static long bfs() {
-        long result = 0;
-        boolean[][] visit = new boolean[N][N];
-        visit[0][0] = true;
-        Queue<Integer> rq = new LinkedList<>();
-        Queue<Integer> cq = new LinkedList<>();
-        rq.offer(0);
-        cq.offer(0);
-        int dir[][] = {{0, 1}, {1, 0}};
-        while (!rq.isEmpty()) {
-            int rr = rq.poll();
-            int cc = cq.poll();
-            for (int i = 0; i < 2; i++) {
-                int nr = rr + (map[rr][cc] * dir[i][0]);
-                int nc = cc + (map[rr][cc] * dir[i][1]);
-                if (nr >= 0 && nr < N && nc >= 0 && nc < N) {
-                    if ((nr == N - 1 && nc == N - 1)) {
-                        result++;
-                        continue;
+        ans [0][0] = 1;
+        int dir[][] = {{0,1},{1,0}};
+        for(int i=0;i<N;i++)
+        {
+            for (int j=0;j<N;j++)
+            {
+                if(ans[i][j]<1 || map[i][j]==0)
+                    continue;
+
+                for(int k=0;k<2;k++)
+                {
+                    int nr = i+ (map[i][j]*dir[k][0]);
+                    int nc = j+ (map[i][j]*dir[k][1]);
+                    if(nr<N && nc < N)
+                    {
+                        ans[nr][nc] += ans[i][j];
                     }
-                    rq.offer(nr);
-                    cq.offer(nc);
                 }
             }
         }
-        return result;
+
+        System.out.println(ans[N-1][N-1]);
     }
+
 }
