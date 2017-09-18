@@ -18,11 +18,12 @@ import java.util.Scanner;
  */
 class GoodNumber {
     static int Answer;
-    static int [] arr;
+    static int[] arr;
     static boolean maps[];
     static int N;
-    public static void main(String args[]) throws Exception	{
-		/*
+
+    public static void main(String args[]) throws Exception {
+        /*
 		   The method below means that the program will read from input.txt, instead of standard(keyboard) input.
 		   To test your program, you may save input data in input.txt file,
 		   and call below method to read from the file when using nextInt() method.
@@ -37,7 +38,7 @@ class GoodNumber {
         //Scanner sc = new Scanner(new FileInputStream("input.txt"));
         //maps = new boolean[];
         int T = sc.nextInt();
-        for(int test_case = 0; test_case < T; test_case++) {
+        for (int test_case = 0; test_case < T; test_case++) {
 
             // Answer = 0;
             /////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,54 +49,34 @@ class GoodNumber {
             /////////////////////////////////////////////////////////////////////////////////////////////
 
             N = sc.nextInt();
-            arr=new int[N];
-            int Max = -1;
+            arr = new int[N];
+            int max = 0;
+            for (int i = 0; i < N; i++) {
+                arr[i] = sc.nextInt();
+                max = Math.max(arr[i],max);
+            }
+            boolean check [][] = new boolean[max+1][3];
+
+            Answer = 0;
+
             for(int i=0;i<N;i++)
             {
-                arr[i]=sc.nextInt();
-                Max = Math.max(arr[i],Max);
-            }
-            Answer=0;
-            maps=new boolean[Max+1];
-            for(int i=1;i<N;i++)
-            {
-                if(maps[arr[i]]) {
+                if(check[arr[i]][2]) {
                     Answer++;
-                    continue;
                 }
-                if(algorithm(0,0,0,i))
+                check[arr[i]][0] = true;
+                for(int j=arr[i]+1;j<=max;j++)
                 {
-                    Answer++;
-                    maps[i] = true;
+                    check[j][1] = check[j-arr[i]][0] || check[j][1];
+                    check[j][2] = check[j-arr[i]][1] || check[j][2];
                 }
             }
+
             // Print the answer to standard output(screen).
-            System.out.println("Case #"+(test_case+1));
+            System.out.println("Case #" + (test_case + 1));
             System.out.println(Answer);
         }
-    }
-    public static boolean algorithm(int index,int count,int sum,int target)
-    {
 
-        if(index==target)
-            return false;
-
-        if(count==3)
-        {
-            if (arr[target]==sum)
-                 return true;
-            else {
-                if(sum<=N)
-                maps[sum] = true;
-                return false;
-            }
-        }else
-        {
-            if((algorithm(index,count+1,sum+arr[index],target)))
-                return true;
-            else {
-                return (algorithm(index + 1, count, sum, target));
-            }
-        }
     }
+
 }
