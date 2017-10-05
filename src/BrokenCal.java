@@ -12,12 +12,14 @@ public class BrokenCal {
         int sx;
         int cost;
         boolean mul;
-        Node(int i,int c,boolean m,int sx)
+        String history="";
+        Node(int i,int c,boolean m,int sx,String s)
         {
             x=i;
             cost=c;
             mul = m;
             this.sx = sx;
+            history=s;
         }
         public void print()
         {
@@ -54,16 +56,13 @@ public class BrokenCal {
             if (list.get(i)==ans)
                 return 2;
 
-            q.offer(new Node(list.get(i),1,false,0));
+            q.offer(new Node(list.get(i),1,false,0,""+list.get(i)));
             visit[list.get(i)]= true;
         }
 
         while(!q.isEmpty())
         {
             Node n = q.poll();
-
-            System.out.print("Start : ");
-            n.print();
 
             for(int i=0;i<list.size();i++)
             {
@@ -72,22 +71,24 @@ public class BrokenCal {
                     int ns = n.sx*10 + list.get(i);
                     if(ns*n.x>1000000)
                         continue;
-                    if(visit[ns*n.x]==false)
+
+                    if(visit[ns*n.x]==false || ns == 1)
                     {
-                        Node nn =new Node(ns*n.x,n.cost+2,false,0);
-                        System.out.print("propagated : ");
-                        nn.print();
-                        if(nn.x==ans)
-                            return nn.cost;
+                        if(ns!=1) {
+                            Node nn = new Node(ns * n.x, n.cost + 1, true, 0,n.history+list.get(i)+"*");
 
+                            if (nn.x == ans) {
+                                n.print();
+                                System.out.println(nn.history);
+                                return nn.cost + 1;
+                            }
+                            q.offer(nn);
+                            visit[ns * n.x] = true;
+                        }
+                        Node nn =new Node(n.x,n.cost+1,true,ns,n.history+list.get(i));
                         q.offer(nn);
-
-                        nn =new Node(n.x,n.cost+1,true,ns);
-                        q.offer(nn);
-                        System.out.print("propagated : ");
-                        nn.print();
-                        visit[ns*n.x] = true;
                     }
+
                 }else
                 {
                     int ns = n.x*10 + list.get(i);
@@ -95,7 +96,7 @@ public class BrokenCal {
                         continue;
                     if(visit[ns]==false)
                     {
-                        Node nn =new Node(ns,n.cost+1,false,0);
+                        Node nn =new Node(ns,n.cost+1,false,0,n.history+list.get(i));
                         if(nn.x==ans)
                             return nn.cost+1;
                         q.offer(nn);
@@ -107,10 +108,10 @@ public class BrokenCal {
             }
             if(!n.mul)
             {
-                Node nn = new Node(n.x,n.cost+1,true,n.sx);
+                Node nn = new Node(n.x,n.cost+1,true,n.sx,n.history+"*");
                 q.offer(nn);
-                //System.out.print("propagated : ");
-                //nn.print();
+                System.out.print("propagated : ");
+                nn.print();
             }
         }
         return -1;
