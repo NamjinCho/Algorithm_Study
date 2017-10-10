@@ -13,6 +13,16 @@ public class BridgeWeight {
         ArrayList<Node> Connection;
         ArrayList<Integer> waits;
     }
+    static class Element{
+        Node node;
+        int curWeight;
+
+        Element(Node n, int w)
+        {
+            node = n;
+            curWeight = w;
+        }
+    }
     static int N;
     static Node [] nodes;
     static int max;
@@ -42,40 +52,39 @@ public class BridgeWeight {
         max=0;
         int s = sc.nextInt();
         int e = sc.nextInt();
-        int di = -1;
-        bfs(s,e);
-        System.out.println(max);
+        int ans = bfs(s,e);
+        if(ans == Integer.MAX_VALUE)
+            ans = -1;
+        System.out.println(ans);
     }
-    static void bfs(int start ,int end)
+    static int bfs(int start ,int end)
     {
-        boolean visit[] = new boolean[N+1];
-        Queue<Node> q = new LinkedList<>();
-        Queue<Integer> wei = new LinkedList<>();
-        wei.offer(Integer.MAX_VALUE);
-        q.offer(nodes[start]);
-        visit[end]  = true;
+        int visit[] = new int[N+1];
+        Queue<Element> q = new LinkedList<>();
+        for(int i=0;i<=N;i++)
+            visit[i] =Integer.MAX_VALUE;
 
-        while(!q.isEmpty())
+        q.offer(new Element(nodes[start],visit[start]));
+
+        while (!q.isEmpty())
         {
-            Node n = q.poll();
-            int weight = wei.poll();
-            for(int i=0;i<n.Connection.size();i++)
+            Element e = q.poll();
+            Node n = e.node;
+
+            int length = n.Connection.size();
+
+            for(int i=0;i<length;i++)
             {
-                if(!visit[n.Connection.get(i).idx] ||n.Connection.get(i).idx == end)
+                int minW = Math.min(e.curWeight,n.waits.get(i));
+                int idx = n.Connection.get(i).idx;
+                if( visit[idx]==Integer.MAX_VALUE || visit[idx] < minW)
                 {
-                    int minw = Math.min(weight,n.waits.get(i));
-                    if(n.Connection.get(i).idx == end)
-                    {
-                        max = Math.max(max,minw);
-                        continue;
-                    }
-                    visit[n.Connection.get(i).idx] = true;
-                    q.offer(n.Connection.get(i));
-                    wei.offer(Math.min(weight,minw));
+                    q.offer(new Element(n.Connection.get(i),minW));
+                    visit[idx] = minW;
                 }
             }
         }
-
+        return visit[end];
     }
 
 }

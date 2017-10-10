@@ -85,6 +85,7 @@ public class XeroGame {
                 if(nbr<nrr && nbc==nrc)
                     first=false;
             }
+
             while(flag)
             {
 
@@ -93,6 +94,7 @@ public class XeroGame {
                 nrc+=dir[i][1];
                 nbr+=dir[i][0];
                 nbc+=dir[i][1];
+
                 if(first) {
                     if(!rO) {
                         if ((board[nrr][nrc] == '.' || board[nrr][nrc] == 'O') && checker(nrr, nrc, nbr, nbc, i)) {
@@ -103,6 +105,7 @@ public class XeroGame {
                             nrr -= dir[i][0];
                             nrc -= dir[i][1];
                         }
+
                         if ((board[nbr][nbc] == '.' || board[nbr][nbc] == 'O') && checker(nrr, nrc, nbr, nbc, i)) {
                             flag = true;
                             // System.out.println("de");

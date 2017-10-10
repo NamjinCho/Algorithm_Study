@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
-import java.util.function.BinaryOperator;
 
 /**
  * Created by NamjinCho on 2017-10-01.
@@ -36,6 +35,8 @@ public class NoBio {
         //System.out.println(f.row + " " + f.col+" "+f.numOfBio+" DE : " + f.dir +" "+ f.sum.get(0).row+" " + f.sum.get(0).col +" " + f.numOfBio);
         int s = f.sum.size();
         for(int i=0;i<s;i++) {
+            if(f.sum.get(i).numOfBio==0)
+                continue;
             f.numOfBio += f.sum.get(i).numOfBio;
             f.sum.get(i).numOfBio=0;
         }
@@ -85,9 +86,9 @@ public class NoBio {
                     if (ars[b.row][b.col].size() != 0) {
                         f = ars[b.row][b.col].get(0);
                         ars[b.row][b.col].remove(0);
-                        while (ars[b.row][b.col].size() != 0) {
-                            f.sum.add(ars[b.row][b.col].get(0));
-                            ars[b.row][b.col].remove(0);
+                            while (ars[b.row][b.col].size() != 0) {
+                                f.sum.add(ars[b.row][b.col].get(0));
+                                ars[b.row][b.col].remove(0);
                         }
                         if(f.sum.size()!=0)
                             merge(f);
