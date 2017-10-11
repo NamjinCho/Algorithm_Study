@@ -29,42 +29,38 @@ public class WorkDistribution {
             ans = new BigDecimal("0");
             start = 1;
             ans = ans.max(getMax(start, 0));
-
-            //String result = ans.setScale(7, BigDecimal.ROUND_HALF_UP).toString();
-            //System.out.println("#" + tc + " " + result.substring(0, result.length() - 1));
-            //System.out.println(result.substring(0,result.length()-1));
-            System.out.println(ans);
+            ans = ans.multiply(new BigDecimal(100));
+            String result = ans.setScale(6, BigDecimal.ROUND_HALF_UP).toString();
+            System.out.println("#"+tc+" "+result);
+            //System.out.println(result);
         }
     }
 
     public static BigDecimal getMax(int current, int visited) {
         BigDecimal result = new BigDecimal("0");
-        if (visited == (1 << N) - 1)
+        if (current >N)
             return new BigDecimal("1");
-
+        //System.out.println(visited);
         if (dp[current][visited] != null)
             return dp[current][visited];
 
-        for (int i = 1; i <= N; i++) {
+        for(int i=1;i<=N;i++)
+        {
             int next = i;
-            if ((visited & (1 << (next - 1))) != 0) {
-                continue;
-            }
 
-            for (int j = 1; j <= N; j++) {
-                next = j;
-                if ((visited & (1 << (next - 1))) != 0) {
-                    continue;
-                }
-                if (percent[i][j] == 0)
-                    continue;
-                System.out.println(i + " - >" + next);
-                double mul = (double) percent[current][next] / 100.0;
-                BigDecimal ret = getMax(next, visited + (1 << (next - 1))).multiply(new BigDecimal(mul));
-                System.out.println(ret);
-                result = result.max(ret);
-            }
+            if((visited & (1<<(next-1)))!=0)
+                continue;
+
+            BigDecimal tmp = new BigDecimal(percent[current][i]);
+            tmp = tmp.divide(new BigDecimal("100"));
+
+            BigDecimal ret = getMax(current+1, visited + (1<<(next-1)));
+            ret=ret.multiply(tmp);
+            result = ret.max(result);
         }
+        dp[current][visited] = result;
+
         return result;
+
     }
 }
