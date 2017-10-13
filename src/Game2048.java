@@ -51,7 +51,7 @@ public class Game2048 {
     //up 위에부터 down 아래부터 움직
     public static void dfs(int count,int board[][])
     {
-        if(count==5) {
+        if(count==10) {
             int m = findMax(board);
             ans=Math.max(ans,m);
             return;
