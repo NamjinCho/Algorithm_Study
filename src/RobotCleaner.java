@@ -1,4 +1,8 @@
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
+
+import static javafx.scene.input.KeyCode.O;
 
 /**
  * Created by NamjinCho on 2017-07-20.
@@ -14,7 +18,14 @@ public class RobotCleaner {
     public static void main(String [] args)
     {
         Scanner sc = new Scanner(System.in);
-
+        System.out.println(
+                Integer.bitCount(1));
+        System.out.println(
+                Integer.bitCount(2));
+        System.out.println(
+                Integer.bitCount(3));
+        System.out.println(
+                Integer.bitCount(4));
         N = sc.nextInt();
         M = sc.nextInt();
 
@@ -54,7 +65,6 @@ public class RobotCleaner {
 
         int nRow = row+dirs[dir][0];
         int nCol = col+dirs[dir][1];
-
         if(board[nRow][nCol]==0)
         {
             dfs(nRow,nCol,0,dir);
